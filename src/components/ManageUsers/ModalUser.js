@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 import _, {forEach} from 'lodash'
 
 const ModalUser = (props) => {
-    const {action, dataModalUser} = props;
+    const {action, dataModalUser, show, onHide} = props;
 
     const defaultUserData = {
         email: '',
@@ -14,7 +14,7 @@ const ModalUser = (props) => {
         username: '',
         password: '',
         address: '',
-        sex: '',
+        gender: 'Male',
         group: ''
     }
     const validInputsDefault = {
@@ -23,7 +23,7 @@ const ModalUser = (props) => {
         username: true,
         password: true,
         address: true,
-        sex: true,
+        gender: true,
         group: true
     }
 
@@ -39,7 +39,7 @@ const ModalUser = (props) => {
 
     useEffect(() => {
         if (action === 'UPDATE') {
-            setUserData({...dataModalUser, group: dataModalUser.group ? dataModalUser.group.id : ''});
+            setUserData({...dataModalUser, group: dataModalUser.groupMember ? dataModalUser.groupMember.id : ''});
         }
     }, [dataModalUser])
 
@@ -53,8 +53,10 @@ const ModalUser = (props) => {
 
     const getGroups = async () => {
         let response = await fetchGroup();
+        console.log(response)
+
         if (response && response.EC === 0) {
-            setUserGroups(response.DT.groupMembers);
+            setUserGroups(response.DT);
             if (response.DT && response.DT.length > 0) {
                 let groups = response.DT;
                 setUserData({...userData, group: groups[0].id})
@@ -76,7 +78,7 @@ const ModalUser = (props) => {
 
         // create user
         setValidInputs(validInputsDefault);
-        let arr = ['email', 'phone', 'password', 'group'];
+        let arr = ["email", "phone", "password", "group"];
         let check = true;
         for (let i = 0; i < arr.length; i++) {
             // check empty input
@@ -101,7 +103,8 @@ const ModalUser = (props) => {
         if (check) {
             let response = action === 'CREATE' ?
                 await createNewUser({...userData, groupId: userData['group']})
-                : await updateCurrentUser({...userData, groupId: userData['group']});
+                : await updateCurrentUser({...userData, groupId: userData['group'],
+                gender: userData['gender'] === null ? 'Male': userData['gender']});
 
             if (response && response.EC === 0) {
                 props.onHide();
@@ -109,6 +112,7 @@ const ModalUser = (props) => {
                     ...defaultUserData, group: userGroups && userGroups.length > 0
                         ? userGroups[0].id : ''
                 })
+                toast.success(response.EM)
             }
             if (response && response.EC !== 0) {
                 toast.error(response.EM);
@@ -119,17 +123,17 @@ const ModalUser = (props) => {
         }
     }
     const handleCloseModalUser = () => {
-        props.onHide();
+        onHide();
         setUserData(defaultUserData);
         setValidInputs(validInputsDefault);
     }
 
     return (
         <>
-            <Modal size="lg" show={props.show} className='modal-user' onHide={() => handleCloseModalUser()}>
+            <Modal size="lg" show={show} className='modal-user' onHide={() => handleCloseModalUser()}>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <span>{props.action === 'CREATE'
+                        <span>{action === 'CREATE'
                             ? 'Crete new user' : 'Edit a user'}</span>
                     </Modal.Title>
                 </Modal.Header>
@@ -138,7 +142,7 @@ const ModalUser = (props) => {
                         <div className='col-12 col-sm-6 form-group'>
                             <label>Email Address (<span className='text-danger'>*</span>): </label>
                             <input
-                                disabled={action === 'CREATE' ? false : true}
+                                disabled={action !== 'CREATE'}
                                 className={validInputs.email ? 'form-control' : 'form-control is-invalid'}
                                 type="email" value={userData.email}
                                 onChange={(event) => handleOnChangeInput(event.target.value, "email")}
@@ -148,7 +152,7 @@ const ModalUser = (props) => {
                         <div className='col-12 col-sm-6 form-group'>
                             <label>Phone Number(<span className='text-danger'>*</span>):</label>
                             <input
-                                disabled={action === 'CREATE' ? false : true}
+                                disabled={action !== 'CREATE'}
                                 className={validInputs.phone ? 'form-control' : 'form-control is-invalid'}
                                 type="text" value={userData.phone}
                                 onChange={(event) => handleOnChangeInput(event.target.value, "phone")}
@@ -179,12 +183,12 @@ const ModalUser = (props) => {
                         <div className='col-12 col-sm-6 form-group'>
                             <label>Gender:</label>
                             <select className='form-select'
-                                    onChange={(event) => handleOnChangeInput(event.target.value, "sex")}>
-                                value={userData.sex}
-
-                                <option defaultValue="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+                                    onChange={(event) => handleOnChangeInput(event.target.value, "gender")}
+                                    value={userData.gender}
+                            >
+                                <option value='Male' >Male</option>
+                                <option value='Female'>Female</option>
+                                <option value='Other'>Other</option>
                             </select>
                         </div>
                         <div className='col-12 col-sm-6 form-group'>

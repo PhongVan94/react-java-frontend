@@ -1,16 +1,16 @@
-import { FETCH_USER_ERROR, FETCH_USER_SUCCESS, FETCH_USER_LOGIN, USER_LOGOUT, USER_REFRESH } from "../actions/userAction";
+import {FETCH_USER_ERROR, FETCH_USER_SUCCESS, FETCH_USER_LOGIN, USER_LOGOUT, USER_REFRESH} from "../actions/userAction";
+import data from "bootstrap/js/src/dom/data";
+import {store} from "../Store";
 
 const INITIAL_STATE = {
-
-    account: {
-        email: '',
-        token: '',
-        auth: null,
-
+    dataRedux: {
+        isAuthenticated: false,
+        token: "",
+        account: {},
 
     },
-    isLoading: false,
-    isError: false
+    isLoading: true,
+    isError: false,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -22,16 +22,15 @@ const userReducer = (state = INITIAL_STATE, action) => {
             return {
 
                 ...state,
-                isLoading: true,
+                isLoading: false,
                 isError: false
-
             };
 
         case FETCH_USER_ERROR:
 
             return {
-                ...state, account: {
-                    auth: false,
+                ...state, dataRedux: {
+                    isAuthenticated: false,
                 },
                 isLoading: true,
                 isError: true
@@ -39,37 +38,33 @@ const userReducer = (state = INITIAL_STATE, action) => {
         case FETCH_USER_SUCCESS:
 
             return {
-                ...state,
-                account: {
-                    email: action.data.email,
-                    token: action.data.token,
-                    auth: true
+                ...state, dataRedux: {
+                    isAuthenticated: action.data.payload.isAuthenticated,
+                    token: action.data.payload.token,
+                    account: action.data.payload.account,
                 },
                 isLoading: false,
-                isError: false
+                isError: false,
             };
 
         case USER_LOGOUT:
-            localStorage.removeItem('email')
-            localStorage.removeItem('token')
+            localStorage.removeItem('jwt');
             return {
-                ...state,
-                account: {
-                    email: '',
-                    token: '',
-                    auth: false
+                ...state,dataRedux: {
+                    isAuthenticated: false,
+                    token: "",
+                    account: {},
                 },
+                isLoading: false,
+
             }
         case USER_REFRESH:
+
             return {
                 ...state,
-                account: {
-                    email: localStorage.getItem('email'),
-                    token: localStorage.getItem('token'),
-                    auth: true
-                },
             }
-        default: return state;
+        default:
+            return state;
 
     }
 

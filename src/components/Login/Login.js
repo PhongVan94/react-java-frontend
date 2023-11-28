@@ -3,9 +3,16 @@ import './Login.scss';
 import {useHistory,Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {loginUser} from  "../services/userServices"
+import {handleLoginRedux} from "../redux/actions/userAction";
+import {useDispatch, useSelector} from "react-redux";
 
 const Login = (props) => {
+    const isLoading = useSelector(state => state.user.isLoading);
+    const account = useSelector(state => state.user.dataRedux.account);
+    const token = useSelector(state => state.user.dataRedux.token);
+    const isAuthenticated =  useSelector(state => state.user.dataRedux.isAuthenticated);
 
+    const dispatch = useDispatch();
 
     let history = useHistory();
 
@@ -35,29 +42,11 @@ const Login = (props) => {
             setObjValidInput({ ...defaultObjValidInput, isVaLidPassword: false })
             return;
         }
-        let response = await loginUser(valueLogin, password);
-        if (response && +response.EC === 0) {
-            //success
-            let groupWithRoles = response.DT.groupWithRoles;
-            let email = response.DT.email;
-            let username = response.DT.username;
-            // let token = response.DT.access_token;
-            let data = {
-                isAuthenticated: true,
-                // token,
-                account: { groupWithRoles, email, username }
-            }
+        dispatch(handleLoginRedux(valueLogin,password));
 
-            // localStorage.setItem('jwt', token)
+        console.log(account);
 
-            // loginContext(data);
 
-            history.push("/users");
-        }
-        if (response && +response.EC !== 0) {
-            //error
-            toast.error(response.EM)
-        }
     }
     const handlePressEnter = (event) => {
         if (event.charCode === 13 && event.code === 'Enter') {
@@ -66,10 +55,10 @@ const Login = (props) => {
     }
 
     useEffect(() => {
-        // if (user && user.isAuthenticated) {
-        //     history.push('/');
-        // }
-    }, [])
+        if (account && token && isAuthenticated) {
+            history.push('/');
+        }
+    }, [account, token, isAuthenticated])
 
     return (
         <div className="login-container">

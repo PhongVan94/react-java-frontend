@@ -9,7 +9,7 @@ import ModalUser from "./ModalUser";
 const Users = (props) => {
     const [listUsers, setListUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const [currentLimit, setCurrentLimit] = useState(2);
+    const [currentLimit, setCurrentLimit] = useState(5);
     const [totalPages, setTotalPage] = useState(0);
     const [isShowModalDelete, setIsShowModalDelete] = useState(false);
     //modal delete
@@ -118,7 +118,7 @@ const Users = (props) => {
                                                 <td>{item.id}</td>
                                                 <td>{item.email}</td>
                                                 <td>{item.username}</td>
-                                                <td>{item.group ? item.group.name : ''}</td>
+                                                <td>{item.groupMember ? item.groupMember.name : ''}</td>
                                                 <td>
                                                         <span
                                                             title="Edit"

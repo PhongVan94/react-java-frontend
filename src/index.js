@@ -7,19 +7,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import {Provider} from "react-redux";
-import store from './components/redux/store';
+
+import {PersistGate} from "redux-persist/integration/react";
+import {store,persistor} from "./components/redux/Store";
 
 ReactDOM.render(
-    // <Provider store={store}>
-
+    <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
         <React.StrictMode>
             <BrowserRouter>
                 <App/>
             </BrowserRouter>
         </React.StrictMode>
+        </PersistGate>
 
-    // </Provider>
-,
+    </Provider>
+    ,
     document.getElementById('root'
     )
 )

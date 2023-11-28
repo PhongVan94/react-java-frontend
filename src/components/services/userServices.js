@@ -31,13 +31,12 @@ const getUserAccount = () => {
     return axios.get(`/api/v1/account`);
 }
 
-// const logoutUser = () => {
-//     return axios.post(`/api/v1/logout`);
-//
-
+const logoutUser = () => {
+    return axios.post(`/api/v1/logout`);
+}
 
 export {
     fetchAllUser,deleteUser,  fetchGroup, createNewUser, updateCurrentUser, getUserAccount,
-    registerNewUser , loginUser
-    //, logoutUser
+    registerNewUser , loginUser, logoutUser
 }
+
