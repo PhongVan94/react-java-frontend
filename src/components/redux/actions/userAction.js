@@ -1,5 +1,6 @@
 import {loginUser} from "../../services/userServices";
 import {toast} from "react-toastify";
+import localStorage from "redux-persist/es/storage";
 
 export const FETCH_USER_LOGIN = 'FETCH_USER_LOGIN';
 export const FETCH_USER_ERROR = 'FETCH_USER_ERROR';
@@ -13,16 +14,17 @@ export const handleLoginRedux = (valueLogin, password) => {
         dispatch({type: FETCH_USER_LOGIN});
 
         let response = await loginUser(valueLogin, password);
-        if (response && +response.EC === 0) {
+        if (response && +response.ec === 0) {
             //success
-            let groupWithRoles = response.DT.groupWithRoles;
-            let email = response.DT.email;
-            let username = response.DT.username;
-            let token = response.DT.token;
+            let group = response.dt.group;
+            let email = response.dt.email;
+            let firstname = response.dt.firstname;
+            let lastname = response.dt.lastname;
+            let token = response.dt.token;
             let payload = {
                 isAuthenticated: true,
                 token,
-                account: {groupWithRoles, email, username}
+                account: {group, email, firstname,lastname}
             }
 
             localStorage.setItem('jwt', token)

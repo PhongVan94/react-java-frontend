@@ -1,11 +1,12 @@
 import axios from '../setups/customize-axios';
-const registerNewUser = (email, phone, username, password) => {
-    return axios.post('/api/v1/register', {
-        email, phone, username, password
+const registerNewUser = (email, phone, firstname,lastname, password) => {
+    return axios.post('/api/v1/auth/register', {
+        email, phone, firstname, lastname , password
     })
 }
+// test ok
 const loginUser = (valueLogin, password) => {
-    return axios.post('/api/v1/login', {
+    return axios.post('/api/v1/auth/login', {
         valueLogin, password
     })
 }
@@ -32,7 +33,7 @@ const getUserAccount = () => {
 }
 
 const logoutUser = () => {
-    return axios.post(`/api/v1/logout`);
+    return axios.post(`/api/v1/auth/logout`);
 }
 
 export {

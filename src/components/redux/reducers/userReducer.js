@@ -1,6 +1,5 @@
 import {FETCH_USER_ERROR, FETCH_USER_SUCCESS, FETCH_USER_LOGIN, USER_LOGOUT, USER_REFRESH} from "../actions/userAction";
-import data from "bootstrap/js/src/dom/data";
-import {store} from "../Store";
+import localStorage from "redux-persist/es/storage";
 
 const INITIAL_STATE = {
     dataRedux: {
@@ -9,7 +8,7 @@ const INITIAL_STATE = {
         account: {},
 
     },
-    isLoading: true,
+    isLoading: false,
     isError: false,
 };
 
@@ -36,13 +35,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 isError: true
             };
         case FETCH_USER_SUCCESS:
-
             return {
                 ...state, dataRedux: {
                     isAuthenticated: action.data.payload.isAuthenticated,
                     token: action.data.payload.token,
-                    account: action.data.payload.account,
-                },
+                    account: action.data.payload.account,                },
+
                 isLoading: false,
                 isError: false,
             };

@@ -13,7 +13,8 @@ const Register = (props) => {
 
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [username, setUsername] = useState("");
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const defaultValidInput = {
@@ -62,15 +63,16 @@ const Register = (props) => {
     const handleRegister = async () => {
         let check = isValidInputs();
         if (check === true) {
-            let response = await registerNewUser(email, phone, username, password);
+            let response = await registerNewUser(email, phone, firstname,lastname, password);
+
             console.log("check response: ", response)
+
             let serverData = response;
-            if (+serverData.EC === 0) {
-                toast.success(serverData.EM);
+            if (+serverData.ec === 0) {
+                toast.success(serverData.em);
                 history.push("/login");
             } else {
-
-                toast.error(serverData.EM);
+                toast.error(serverData.em);
             }
         }
     }
@@ -108,9 +110,15 @@ const Register = (props) => {
                             </div>
                             <div className='form-group'>
                                 <label>Username:</label>
-                                <input type='text' className='form-control' placeholder='Username'
-                                    value={username} onChange={(event) => setUsername(event.target.value)
+                                <input type='text' className='form-control' placeholder='Firstname'
+                                    value={firstname} onChange={(event) => setFirstname(event.target.value)
                                     }></input>
+                            </div>
+                            <div className='form-group'>
+                                <label>Username:</label>
+                                <input type='text' className='form-control' placeholder='Lastname'
+                                       value={lastname} onChange={(event) => setLastname(event.target.value)
+                                }></input>
                             </div>
                             <div className='form-group'>
                                 <label>Password:</label>
