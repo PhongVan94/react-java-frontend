@@ -1,80 +1,64 @@
 import axios from "axios";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 
-// Set config defaults when creating the instance
+// Create an Axios instance with default configuration
 const instance = axios.create({
-  baseURL: "http://localhost:8080"
-
-  // baseURL: process.env.REACT_APP_BACKEND_URL
+    baseURL: "http://localhost:8080",
+    withCredentials: true,
 });
-instance.defaults.withCredentials = true;
-// Alter defaults after instance has been created
-// instance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("jwt")}`;
-instance.defaults.headers.common['Authorization'] = `ABC`;
 
+// Set Authorization header using the stored JWT token
+const token = localStorage.getItem('jwt');
+if (token) {
+  instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 // Add a request interceptor
-instance.interceptors.request.use(function (config) {
-  // Do something before request is sent
+instance.interceptors.request.use(
+    function (config) {
+        // Do something before request is sent
 
-  return config;
-}, function (error) {
-  // Do something with request error
-  return Promise.reject(error);
-});
+        return config;
+    },
+    function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+    }
+);
 
 // Add a response interceptor
-instance.interceptors.response.use(function (response) {
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  // Do something with response data
-  return response.data;
-}, function (error) {
-  // Any status codes that falls outside the range of 2xx cause this function to trigger
-  // Do something with response error
-  const status = error && error.response && error.response.status || 500;
-  switch (status) {
-      // authentication (token related issues)
-    case 401: {
-      if (window.location.pathname !== '/'
-          && window.location.pathname !== '/login'
-          && window.location.pathname !== '/register') {
-        toast.error('Unauthorized the user. Please Login...');
+instance.interceptors.response.use(
+    function (response) {
+        // Do something with response data
+        return response.data;
+    },
+    function (error) {
+        const status = error?.response?.status || 500;
 
-      }
-      return error.response.data;
-    }
+        // Handle different HTTP status codes
+        switch (status) {
+            case 401:
+                if (window.location.pathname !== '/' &&
+                    window.location.pathname !== '/login' &&
+                    window.location.pathname !== '/register') {
+                    toast.error('Unauthorized user. Please login...');
+                }
+                return error.response.data;
 
-      // forbidden (permission related issues)
-    case 403: {
-      toast.error('You dont have permission to access!');
-      return Promise.reject(error);
-    }
+            case 403:
+                toast.error('You don\'t have permission to access!');
+                return Promise.reject(error);
 
-      // bad request
-    case 400: {
-      return Promise.reject(error);
-    }
+            case 400:
+            case 404:
+            case 409:
+            case 422:
+                return Promise.reject(error);
 
-      // not found
-    case 404: {
-      return Promise.reject(error);
+            default:
+                return Promise.reject(error);
+        }
     }
-
-      // conflict
-    case 409: {
-      return Promise.reject(error);
-    }
-
-      // unprocessable
-    case 422: {
-      return Promise.reject(error);
-    }
-
-      // generic api error (server related) unexpected
-    default: {
-      return Promise.reject(error);
-    }
-  }
-});
+);
 
 export default instance;

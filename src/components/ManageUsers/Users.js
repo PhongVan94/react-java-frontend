@@ -27,9 +27,9 @@ const Users = (props) => {
 
     const fetchUsers = async () => {
         let response = await fetchAllUser(currentPage, currentLimit);
-        if (response && response.DT && response.EC === 0) {
-            setTotalPage(response.DT.totalPages)
-            setListUsers(response.DT.users);
+        if (response && response.dt && response.ec === 0) {
+            setTotalPage(response.dt.totalPages)
+            setListUsers(response.dt.users);
         }
     }
     const handlePageClick = async (event) => {
@@ -56,12 +56,12 @@ const Users = (props) => {
 
     const confirmDeleteUser = async () => {
         let response = await deleteUser(dataModal);
-        if (response && response.EC === 0) {
-            toast.success(response.EM);
+        if (response && response.ec === 0) {
+            toast.success(response.em);
             await fetchUsers();
             setIsShowModalDelete(false);
         } else {
-            toast.error(response.EM)
+            toast.error(response.em)
         }
     }
 
@@ -118,7 +118,7 @@ const Users = (props) => {
                                                 <td>{item.id}</td>
                                                 <td>{item.email}</td>
                                                 <td>{item.username}</td>
-                                                <td>{item.groupMember ? item.groupMember.name : ''}</td>
+                                                <td>{item.group ? item.group.name : ''}</td>
                                                 <td>
                                                         <span
                                                             title="Edit"

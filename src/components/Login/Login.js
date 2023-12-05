@@ -3,7 +3,7 @@ import './Login.scss';
 import {useHistory,Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {loginUser} from  "../services/userServices"
-import {handleLoginRedux} from "../redux/actions/userAction";
+import {handleLoginRedux, handleRefresh} from "../redux/actions/userAction";
 import {useDispatch, useSelector} from "react-redux";
 
 const Login = (props) => {
@@ -56,9 +56,9 @@ const Login = (props) => {
 
     useEffect(() => {
         if (account && token && isAuthenticated) {
-            history.push('/');
+            history.push("/");
         }
-    }, [account, token, isAuthenticated])
+    }, [account])
 
     return (
         <div className="login-container">

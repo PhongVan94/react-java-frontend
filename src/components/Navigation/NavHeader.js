@@ -32,11 +32,11 @@ const NavHeader = (props) => {
         localStorage.removeItem('jwt'); // clear local storage
         dispatch(handleLogoutRedux());
 
-        if (data && +data.EC === 0) {
+        if (data && +data.ec === 0) {
             toast.success('Logout success')
             history.push('/login')
         } else {
-            toast.error(data.EM)
+            toast.error(data.em)
         }
     }
     if (account && isAuthenticated === true || location.pathname === '/' || location.pathname === '/about') {
@@ -71,7 +71,7 @@ const NavHeader = (props) => {
                                     {account && isAuthenticated === true ?
                                         <>
                                             <Nav.Item className='nav-link'>
-                                                Welcome {account.username} !
+                                                Welcome {account.firstname} !
                                             </Nav.Item>
                                             <NavDropdown title="Settings" id="basic-nav-dropdown">
                                                 <NavDropdown.Item >Change Password</NavDropdown.Item>

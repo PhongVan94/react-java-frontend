@@ -1,6 +1,6 @@
 import {loginUser} from "../../services/userServices";
 import {toast} from "react-toastify";
-import localStorage from "redux-persist/es/storage";
+// import localStorage from "redux-persist/es/storage";
 
 export const FETCH_USER_LOGIN = 'FETCH_USER_LOGIN';
 export const FETCH_USER_ERROR = 'FETCH_USER_ERROR';
@@ -38,9 +38,9 @@ export const handleLoginRedux = (valueLogin, password) => {
 else
     {
         //error
-        if (response && +response.EC !== 0) {
+        if (response && +response.ec !== 0) {
             //error
-            toast.error(response.EM)
+            toast.error(response.em)
         }
         dispatch({
             type: FETCH_USER_ERROR

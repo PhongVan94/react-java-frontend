@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 const PrivateRoutes = (props) => {
     const account = useSelector(state => state.user.dataRedux.account);
 
-    const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+    const isAuthenticated = useSelector(state => state.user.dataRedux.isAuthenticated);
 
     if (account
         && isAuthenticated === true

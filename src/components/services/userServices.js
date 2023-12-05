@@ -1,7 +1,8 @@
 import axios from '../setups/customize-axios';
-const registerNewUser = (email, phone, firstname,lastname, password) => {
+
+const registerNewUser = (email, phone, firstname, lastname, password) => {
     return axios.post('/api/v1/auth/register', {
-        email, phone, firstname, lastname , password
+        email, phone, firstname, lastname, password
     })
 }
 // test ok
@@ -21,11 +22,11 @@ const fetchGroup = () => {
     return axios.get(`/api/v1/group/read`);
 }
 const createNewUser = (userData) => {
-    return axios.post("/api/v1/user/create", { ...userData })
+    return axios.post("/api/v1/user/create", {...userData})
 }
 
 const updateCurrentUser = (userData) => {
-    return axios.put("/api/v1/user/update", { ...userData })
+    return axios.put("/api/v1/user/update", {...userData})
 }
 
 const getUserAccount = () => {
@@ -37,7 +38,7 @@ const logoutUser = () => {
 }
 
 export {
-    fetchAllUser,deleteUser,  fetchGroup, createNewUser, updateCurrentUser, getUserAccount,
-    registerNewUser , loginUser, logoutUser
+    fetchAllUser, deleteUser, fetchGroup, createNewUser, updateCurrentUser, getUserAccount,
+    registerNewUser, loginUser, logoutUser
 }
 

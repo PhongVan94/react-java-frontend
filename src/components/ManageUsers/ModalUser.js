@@ -11,7 +11,8 @@ const ModalUser = (props) => {
     const defaultUserData = {
         email: '',
         phone: '',
-        username: '',
+        firstname: '',
+        lastname: '',
         password: '',
         address: '',
         gender: 'Male',
@@ -20,7 +21,8 @@ const ModalUser = (props) => {
     const validInputsDefault = {
         email: true,
         phone: true,
-        username: true,
+        firstname: true,
+        lastname: true,
         password: true,
         address: true,
         gender: true,
@@ -39,7 +41,7 @@ const ModalUser = (props) => {
 
     useEffect(() => {
         if (action === 'UPDATE') {
-            setUserData({...dataModalUser, group: dataModalUser.groupMember ? dataModalUser.groupMember.id : ''});
+            setUserData({...dataModalUser, group: dataModalUser.group ? dataModalUser.group.id : ''});
         }
     }, [dataModalUser])
 
@@ -55,14 +57,14 @@ const ModalUser = (props) => {
         let response = await fetchGroup();
         console.log(response)
 
-        if (response && response.EC === 0) {
-            setUserGroups(response.DT);
-            if (response.DT && response.DT.length > 0) {
-                let groups = response.DT;
+        if (response && response.ec === 0) {
+            setUserGroups(response.dt);
+            if (response.dt && response.dt.length > 0) {
+                let groups = response.dt;
                 setUserData({...userData, group: groups[0].id})
             }
         } else {
-            toast.error(response.EM)
+            toast.error(response.em)
         }
     }
 
@@ -106,18 +108,18 @@ const ModalUser = (props) => {
                 : await updateCurrentUser({...userData, groupId: userData['group'],
                 gender: userData['gender'] === null ? 'Male': userData['gender']});
 
-            if (response && response.EC === 0) {
+            if (response && response.ec === 0) {
                 props.onHide();
                 setUserData({
                     ...defaultUserData, group: userGroups && userGroups.length > 0
                         ? userGroups[0].id : ''
                 })
-                toast.success(response.EM)
+                toast.success(response.em)
             }
-            if (response && response.EC !== 0) {
-                toast.error(response.EM);
+            if (response && response.ec !== 0) {
+                toast.error(response.em);
                 let _validInputs = _.cloneDeep(validInputsDefault);
-                _validInputs[response.DT] = false;
+                _validInputs[response.dt] = false;
                 setValidInputs(_validInputs);
             }
         }
@@ -159,10 +161,16 @@ const ModalUser = (props) => {
                             />
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
-                            <label>Username:</label>
+                            <label>Firstname:</label>
                             <input className='form-control'
-                                   type="text" value={userData.username}
-                                   onChange={(event) => handleOnChangeInput(event.target.value, "username")}/>
+                                   type="text" value={userData.firstname}
+                                   onChange={(event) => handleOnChangeInput(event.target.value, "firstname")}/>
+                        </div>
+                        <div className='col-12 col-sm-6 form-group'>
+                            <label>Lastname:</label>
+                            <input className='form-control'
+                                   type="text" value={userData.lastname}
+                                   onChange={(event) => handleOnChangeInput(event.target.value, "lastname")}/>
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
                             {action === 'CREATE'
@@ -209,7 +217,7 @@ const ModalUser = (props) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onHide={() => handleCloseModalUser()}>Close</Button>
+                    <Button variant="secondary" onClick={() => handleCloseModalUser()}>Close</Button>
                     <Button variant="primary" onClick={() => handleConfirmUser()}>
                         {action === 'CREATE' ? 'Save' : 'Update'}
                     </Button>
