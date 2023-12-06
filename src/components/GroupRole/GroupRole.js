@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import './GroupRole.scss'
-import {fetchGroup} from "../services/userServices";
+import {fetchGroup} from "../services/groupService";
 import {toast} from 'react-toastify';
 import {fetchAllRole, deleteRole, fetchRoleByGroup, assignRolesToGroup} from "../services/roleService";
 import _ from 'lodash';

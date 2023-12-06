@@ -1,7 +1,8 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {useEffect, useState} from 'react';
-import {createNewUser, fetchGroup, updateCurrentUser} from '../services/userServices'
+import {createNewUser, updateCurrentUser} from '../services/userServices'
+import {fetchGroup} from "../services/groupService";
 import {toast} from 'react-toastify';
 import _, {forEach} from 'lodash'
 

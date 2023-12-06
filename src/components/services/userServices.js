@@ -18,9 +18,6 @@ const deleteUser = (user) => {
     return axios.post(`/api/v1/user/delete/${user.id}`);
 }
 
-const fetchGroup = () => {
-    return axios.get(`/api/v1/group/read`);
-}
 const createNewUser = (userData) => {
     return axios.post("/api/v1/user/create", {...userData})
 }
@@ -38,7 +35,7 @@ const logoutUser = () => {
 }
 
 export {
-    fetchAllUser, deleteUser, fetchGroup, createNewUser, updateCurrentUser, getUserAccount,
+    fetchAllUser, deleteUser, createNewUser, updateCurrentUser, getUserAccount,
     registerNewUser, loginUser, logoutUser
 }
 

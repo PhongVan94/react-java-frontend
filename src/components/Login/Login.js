@@ -1,8 +1,8 @@
 import {useEffect, useState, useContext} from 'react';
 import './Login.scss';
-import {useHistory,Link} from 'react-router-dom';
+import {useHistory, Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {loginUser} from  "../services/userServices"
+import {loginUser} from "../services/userServices"
 import {handleLoginRedux, handleRefresh} from "../redux/actions/userAction";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -10,7 +10,7 @@ const Login = (props) => {
     const isLoading = useSelector(state => state.user.isLoading);
     const account = useSelector(state => state.user.dataRedux.account);
     const token = useSelector(state => state.user.dataRedux.token);
-    const isAuthenticated =  useSelector(state => state.user.dataRedux.isAuthenticated);
+    const isAuthenticated = useSelector(state => state.user.dataRedux.isAuthenticated);
 
     const dispatch = useDispatch();
 
@@ -34,18 +34,17 @@ const Login = (props) => {
 
         if (!valueLogin) {
             toast.error("Please enter your email or phone number!");
-            setObjValidInput({ ...defaultObjValidInput, isVaLidValueLogin: false })
+            setObjValidInput({...defaultObjValidInput, isVaLidValueLogin: false})
             return;
         }
         if (!password) {
             toast.error("Please enter your password!")
-            setObjValidInput({ ...defaultObjValidInput, isVaLidPassword: false })
+            setObjValidInput({...defaultObjValidInput, isVaLidPassword: false})
             return;
         }
-        dispatch(handleLoginRedux(valueLogin,password));
+        await dispatch(handleLoginRedux(valueLogin, password));
 
-        console.log(account);
-
+        window.location.reload();
 
     }
     const handlePressEnter = (event) => {

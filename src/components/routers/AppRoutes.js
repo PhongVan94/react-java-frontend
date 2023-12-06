@@ -7,6 +7,9 @@ import Register from "../Register/Register";
 import About from "../About/About";
 import PrivateRoutes from "./PrivateRoutes";
 import GroupRole from "../GroupRole/GroupRole";
+import Role from "../Role/Role";
+import Group from "../Group/Group";
+import Project from "../Project/Project";
 
 const AppRoutes = (props) => {
     return (
@@ -14,8 +17,9 @@ const AppRoutes = (props) => {
             <Switch>
 
                 <PrivateRoutes path="/users" component={Users}/>
-                {/*<PrivateRoutes path="/projects" component={Project} />*/}
-                {/*<PrivateRoutes path="/roles" component={Role} />*/}
+                <PrivateRoutes path="/projects" component={Project} />
+                <PrivateRoutes path="/roles" component={Role} />
+                <PrivateRoutes path="/groups" component={Group} />
                 <PrivateRoutes path="/group-role" component={GroupRole} />
 
 
